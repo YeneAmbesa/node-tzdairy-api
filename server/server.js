@@ -7,6 +7,7 @@ var {Stakeholder} = require('./models/stakeholder');
 var {User} = require('./models/user');
 
 var app = express();
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 
@@ -57,8 +58,8 @@ app.get('/stakeholders/:id', (req, res) => {
  }).catch((e) => res.status(400).send());
 });
 
-app.listen(8080, () => {
-  console.log('Started on port 8080');
+app.listen(port, () => {
+  console.log(`Started on port ${port}`);
 });
 
 module.exports = {app};
