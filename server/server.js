@@ -58,6 +58,21 @@ app.get('/stakeholders/:id', (req, res) => {
  }).catch((e) => res.status(400).send());
 });
 
+//Finds one document by id and removes it and then returns the doc
+app.delete('/stakeholders/:id', (req, res) => {
+  var id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  };
+  Stakeholder.findByIdAndRemove(id).then((stakeholder) => {
+    if (!stakeholder) {
+      return res.status(404).send();
+    }
+  res.send({stakeholder});
+ }).catch((e) => res.status(400).send());
+});
+
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
