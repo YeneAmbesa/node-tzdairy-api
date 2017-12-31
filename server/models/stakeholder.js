@@ -67,15 +67,37 @@ var Stakeholder = mongoose.model('Stakeholder', {
     required: true,
     minlength: 1,
     trim: true
+  },
+  regStatus: {
+    type: Boolean,
+    default: false
+  },
+  regAt: {
+    type: Number,
+    default: null
+  },
+  retentionValDate: {
+    type: Number,
+    default: null
+  },
+  retentionFee: {
+    type: Number,
+    default: null
+  },
+  retentionStatus: {
+    type: String,
+    minlength: 1,
+    trim: true
   }
-  // completed: {
-  //   type: Boolean,
-  //   default: false
-  // },
-  // completedAt: {
+  // regFee: {
   //   type: Number,
   //   default: null
   // }
+  // regFeeStatus: {
+  //   type: Number,
+  //   default: null
+  // }
+
 });
 
 module.exports = {Stakeholder};

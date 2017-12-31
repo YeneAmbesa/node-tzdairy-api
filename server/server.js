@@ -1,5 +1,6 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const _ = require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
@@ -24,7 +25,12 @@ app.post('/stakeholders', (req, res) => {
 	  region: req.body.region,
 	  district: req.body.district,
 	  ward: req.body.ward,
-	  village: req.body.village
+	  village: req.body.village,
+    regStatus: req.body.regStatus,
+    regAt: req.body.regAt,
+    retentionValDate: req.body.retentionValDate,
+    retentionFee: req.body.retentionFee,
+    retentionStatus: req.body.retentionStatus
   });
 
   stakeholder.save().then((doc) => {
@@ -72,6 +78,47 @@ app.delete('/stakeholders/:id', (req, res) => {
   res.send({stakeholder});
  }).catch((e) => res.status(400).send());
 });
+
+//This code allows us to update items
+app.patch('/stakeholders/:id', (req, res) => {
+  var id = req.params.id;
+  var body = _.pick(req.body, ['type', 'firstName', 'lastName', 'poBox', 'plusCode', 'region', 'district', 'ward', 'village', 'regStatus', 'retentionValDate', 'retentionFee', 'retentionStatus']);
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  };
+
+//this section checks registration status and stakeholder is registered sets regAt
+  if (_.isBoolean(body.regStatus) && body.regStatus) {
+    //if completed is boolean and it's true
+    body.regAt = new Date().getTime();
+  } else {
+    //if completed is not boolean or it's not true
+    body.regStatus = false;
+    body.regAt = null;
+  };
+
+//This section checks if retentionStatus is current
+  if (body.retentionValDate > Date.now()) {
+    body.retentionStatus = "Current";
+  } else {
+    body.retentionStatus = "Past Due";
+  };
+
+
+  //This section sets object with the key value pairs we generate in body and returns the updated doc setting new to true
+  Stakeholder.findByIdAndUpdate(id, {$set: body}, {new: true}).then((stakeholder) => {
+    if (!stakeholder) {
+      return res.status(404).send();
+    }
+
+    res.send({stakeholder});
+  }).catch((e) => {
+    res.status(400).send();
+  })
+
+});
+
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
