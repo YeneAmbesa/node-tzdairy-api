@@ -1,3 +1,5 @@
+// var env = process.env.NODE_ENV;
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -6,6 +8,10 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Stakeholder} = require('./models/stakeholder');
 var {User} = require('./models/user');
+
+var {Employees} = require('./models/employee');
+var {Partners} = require('./models/partner');
+var {Producer} = require('./models/stakeholder-producer');
 
 var app = express();
 const port = process.env.PORT || 8080;
@@ -30,10 +36,40 @@ app.post('/stakeholders', (req, res) => {
     regAt: req.body.regAt,
     retentionValDate: req.body.retentionValDate,
     retentionFee: req.body.retentionFee,
-    retentionStatus: req.body.retentionStatus
+    retentionStatus: req.body.retentionStatus,
+    employees: req.body.employees,
+    partners: req.body.partners,
+    breeding: req.body.breeding,
+    vaccines: req.body.vaccines,
+    feeding: req.body.feeding,
+    market: req.body.feeding,
+    power: req.body.power,
+    milkProduction: req.body.milkProduction,
   });
 
   stakeholder.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+//This code posts a new stakeholder
+app.post('/producers', (req, res) => {
+  var producer = new Producer ({
+    stakeholder: req.body.stakeholder,
+    employee: req.body.employee,
+    equipment: req.body.equipment,
+    partner: req.body.partner,
+    breeding: req.body.breeding,
+    vaccine: req.body.vaccine,
+    feeding: req.body.feeding,
+    market: req.body.feeding,
+    power: req.body.power,
+    milkProduction: req.body.milkProduction,
+  });
+
+  producer.save().then((doc) => {
     res.send(doc);
   }, (e) => {
     res.status(400).send(e);
@@ -119,7 +155,37 @@ app.patch('/stakeholders/:id', (req, res) => {
 
 });
 
+//This code creates a new User
+// app.post('/users', (req, res) => {
+//   var body = _.pick(req.body, ['email', 'password']);
+//   var user = new User(body);
+//
+//
+//   user.save().then(() => {
+//     return user.generateAuthToken();
+//   }).then((token) => {
+//     res.header('x-auth', token).send(user);
+//   }).catch((e) => {
+//     res.status(400).send(e);
+//   })
+// });
+//////////////////////
+// POST /users
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
 
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+});
+
+
+/////////////////////////
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
