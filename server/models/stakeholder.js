@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+//const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var {Employees} = require('./employee');
 var {Partners} = require('./partner');
@@ -9,7 +10,7 @@ var {MilkProduction} = require('./milk-production');
 //var Stakeholder = mongoose.model('Stakeholder', {
 var StakeholderSchema = new mongoose.Schema({
       stakeholders:[{
-              type: {
+              stakeholderType: {
                 type: String,
                 required: true,
                 minlength: 1,
@@ -96,6 +97,10 @@ var StakeholderSchema = new mongoose.Schema({
                 minlength: 1,
                 trim: true
               }
+              //stakeholderId: [{
+              //   type: ObjectId,
+              //   ref: 'Stakeholder'
+              // }]
   // partners: [{type:mongoose.Schema.Types.Array, ref: 'Partners'}],
   // employees: [{type:mongoose.Schema.Types.Array, ref: 'Employees'}],
   // breeding: [{type:mongoose.Schema.Types.Array, ref: 'Breeding'}],

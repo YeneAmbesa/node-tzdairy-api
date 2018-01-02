@@ -54,19 +54,20 @@ app.post('/stakeholders', (req, res) => {
   });
 });
 
-//This code posts a new stakeholder
+//This code posts a new producer
 app.post('/producers', (req, res) => {
   var producer = new Producer ({
-    stakeholder: req.body.stakeholder,
+    //producer: req.body.producer
+    breeding: req.body.breeding,
     employee: req.body.employee,
     equipment: req.body.equipment,
-    partner: req.body.partner,
-    breeding: req.body.breeding,
-    vaccine: req.body.vaccine,
     feeding: req.body.feeding,
     market: req.body.feeding,
-    power: req.body.power,
     milkProduction: req.body.milkProduction,
+    power: req.body.power,
+    partner: req.body.partner,
+    stakeholder: req.body.stakeholder,
+    vaccine: req.body.vaccine
   });
 
   producer.save().then((doc) => {
@@ -85,6 +86,16 @@ app.get('/stakeholders', (req, res) => {
   });
 });
 
+//This code gets all producers
+app.get('/producers', (req, res) => {
+  Producer.find().then((producers) => {
+    res.send({producers});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+
 //GET /stakeholders/1234123
 app.get('/stakeholders/:id', (req, res) => {
   var id = req.params.id;
@@ -99,6 +110,23 @@ app.get('/stakeholders/:id', (req, res) => {
    res.send({stakeholder});
  }).catch((e) => res.status(400).send());
 });
+
+//GET /producers/1234123
+app.get('/producers/:id', (req, res) => {
+  var id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  };
+  Producer.findById(id).then((producer) => {
+     if (!producer) {
+       return res.status(404).send();
+     }
+   res.send({producer});
+ }).catch((e) => res.status(400).send());
+});
+
+
 
 //Finds one document by id and removes it and then returns the doc
 app.delete('/stakeholders/:id', (req, res) => {

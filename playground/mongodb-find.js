@@ -2,7 +2,7 @@
 const {MongoClient, ObjectID} = require('mongodb');
 
 
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
+MongoClient.connect('mongodb://localhost:27017/TZDairyApp', (err, db) => {
   if (err) {
     return console.log('Unable to connect to MongoDB server');
   }
@@ -33,7 +33,13 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //     console.log('Unable to fetch todos', err);
   //   });
 
-db.collection('Users').find({firstName: 'Thelonius'}).toArray().then((docs) => {
+// db.collection('Users').find({firstName: 'Thelonius'}).toArray().then((docs) => {
+//   console.log(JSON.stringify(docs, undefined, 2));
+// }, (err) => {
+//   console.log('Unable to fetch users', err);
+// });
+
+db.collection('producers').find({"stakeholder.district": 'Hampton'}).toArray().then((docs) => {
   console.log(JSON.stringify(docs, undefined, 2));
 }, (err) => {
   console.log('Unable to fetch users', err);

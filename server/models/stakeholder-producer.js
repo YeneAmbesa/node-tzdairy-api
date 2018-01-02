@@ -24,6 +24,7 @@ var ProducerSchema = new mongoose.Schema({
   milkProduction: [{type:mongoose.Schema.Types.Object, ref: 'Milk Production'}],
   partner: [{type:mongoose.Schema.Types.Object, ref: 'Partner'}],
   power: [{type:mongoose.Schema.Types.Object, ref: 'Power'}],
+  //stakeholder: [Stakeholder],
   stakeholder: [{type:mongoose.Schema.Types.Object, ref: 'Stakeholder'}],
   vaccine: [{type:mongoose.Schema.Types.Object, ref: 'Vaccine'}]
 
