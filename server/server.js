@@ -37,14 +37,14 @@ app.post('/stakeholders', (req, res) => {
     retentionValDate: req.body.retentionValDate,
     retentionFee: req.body.retentionFee,
     retentionStatus: req.body.retentionStatus,
-    employees: req.body.employees,
-    partners: req.body.partners,
-    breeding: req.body.breeding,
-    vaccines: req.body.vaccines,
-    feeding: req.body.feeding,
-    market: req.body.feeding,
-    power: req.body.power,
-    milkProduction: req.body.milkProduction,
+    // employees: req.body.employees,
+    // partners: req.body.partners,
+    // breeding: req.body.breeding,
+    // vaccines: req.body.vaccines,
+    // feeding: req.body.feeding,
+    // market: req.body.feeding,
+    // power: req.body.power,
+    // milkProduction: req.body.milkProduction,
   });
 
   stakeholder.save().then((doc) => {
