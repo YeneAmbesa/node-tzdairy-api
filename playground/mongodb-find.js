@@ -39,7 +39,7 @@ MongoClient.connect('mongodb://localhost:27017/TZDairyApp', (err, db) => {
 //   console.log('Unable to fetch users', err);
 // });
 
-db.collection('producers').find({"stakeholder.district": 'Hampton'}).toArray().then((docs) => {
+db.collection('producers').find({"employee.femaleNo": '10'}).toArray().then((docs) => {
   console.log(JSON.stringify(docs, undefined, 2));
 }, (err) => {
   console.log('Unable to fetch users', err);

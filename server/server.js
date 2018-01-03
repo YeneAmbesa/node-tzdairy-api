@@ -11,7 +11,7 @@ var {User} = require('./models/user');
 
 var {Employees} = require('./models/employee');
 var {Partners} = require('./models/partner');
-var {Producer} = require('./models/stakeholder-producer');
+var {Producer} = require('./models/producer');
 
 var app = express();
 const port = process.env.PORT || 8080;
@@ -57,7 +57,6 @@ app.post('/stakeholders', (req, res) => {
 //This code posts a new producer
 app.post('/producers', (req, res) => {
   var producer = new Producer ({
-    //producer: req.body.producer
     breeding: req.body.breeding,
     employee: req.body.employee,
     equipment: req.body.equipment,
@@ -143,14 +142,38 @@ app.delete('/stakeholders/:id', (req, res) => {
  }).catch((e) => res.status(400).send());
 });
 
-//This code allows us to update items
-app.patch('/stakeholders/:id', (req, res) => {
+//Finds one document by id and removes it and then returns the doc
+app.delete('/producers/:id', (req, res) => {
   var id = req.params.id;
-  var body = _.pick(req.body, ['type', 'firstName', 'lastName', 'poBox', 'plusCode', 'region', 'district', 'ward', 'village', 'regStatus', 'retentionValDate', 'retentionFee', 'retentionStatus']);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
   };
+  Producer.findByIdAndRemove(id).then((producer) => {
+    if (!producer) {
+      return res.status(404).send();
+    }
+  res.send({producer});
+ }).catch((e) => res.status(400).send());
+});
+
+// //This code allows us to update items
+// app.patch('/stakeholders/:id', (req, res) => {
+//   var id = req.params.id;
+//   var body = _.pick(req.body, ['type', 'firstName', 'lastName', 'poBox', 'plusCode', 'region', 'district', 'ward', 'village', 'regStatus', 'retentionValDate', 'retentionFee', 'retentionStatus']);
+//
+//   if (!ObjectID.isValid(id)) {
+//     return res.status(404).send();
+//   };
+
+  //This code allows us to update items
+  app.patch('/producers/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['breeding', 'employee', 'equipment', 'feeding', 'market', 'milkProduction', 'partner', 'power', 'stakeholder', 'vaccine']);
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    };
 
 //this section checks registration status and stakeholder is registered sets regAt
   if (_.isBoolean(body.regStatus) && body.regStatus) {
@@ -171,12 +194,12 @@ app.patch('/stakeholders/:id', (req, res) => {
 
 
   //This section sets object with the key value pairs we generate in body and returns the updated doc setting new to true
-  Stakeholder.findByIdAndUpdate(id, {$set: body}, {new: true}).then((stakeholder) => {
-    if (!stakeholder) {
+  Producer.findByIdAndUpdate(id, {$set: body}, {new: true}).then((producer) => {
+    if (!producer) {
       return res.status(404).send();
     }
 
-    res.send({stakeholder});
+    res.send({producer});
   }).catch((e) => {
     res.status(400).send();
   })

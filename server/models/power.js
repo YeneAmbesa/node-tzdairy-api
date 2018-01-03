@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 var PowerSchema = new mongoose.Schema({
     //power:[{
       powerSource:{
-        type: Array,
+        type: String,
         minlength: 1,
         trim: true
     }
